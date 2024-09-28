@@ -80,7 +80,7 @@ def check_user_approval(user_id):
     return False
 
 def send_not_approved_message(chat_id):
-    bot.send_message(chat_id, "*YOU ARE NOT APPROVED @raj14754*", parse_mode='Markdown')
+    bot.send_message(chat_id, "*YOU ARE NOT APPROVED*", parse_mode='Markdown')
 
 @bot.message_handler(commands=['approve', 'disapprove'])
 def approve_or_disapprove_user(message):
@@ -90,7 +90,7 @@ def approve_or_disapprove_user(message):
     cmd_parts = message.text.split()
 
     if not is_admin:
-        bot.send_message(chat_id, "*You are not authorized to use this command @raj14754*", parse_mode='Markdown')
+        bot.send_message(chat_id, "*You are not authorized to use this command*", parse_mode='Markdown')
         return
 
     if len(cmd_parts) < 2:
