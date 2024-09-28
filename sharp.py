@@ -13,12 +13,12 @@ from threading import Thread
 
 loop = asyncio.get_event_loop()
 
-TOKEN = '7452727677:AAE_EAuNLGehGZpzTB-aVpqjjvbEbbsj4sE'
-user_id =("1009132250")
+TOKEN = '7311450065:AAG75zxiiD5M7OkRXMgkfH96Hnl5gck60Lk'
+user_id =("5674869424")
 MONGO_URI = 'mongodb+srv://sharp:sharp@sharpx.x82gx.mongodb.net/?retryWrites=true&w=majority&appName=SharpX'
-FORWARD_CHANNEL_ID = -1002201891047
-CHANNEL_ID = -1002201891047
-error_channel_id = -1002201891047
+FORWARD_CHANNEL_ID = -1002418549191
+CHANNEL_ID = -1002418549191
+error_channel_id = -1002418549191
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -80,7 +80,7 @@ def check_user_approval(user_id):
     return False
 
 def send_not_approved_message(chat_id):
-    bot.send_message(chat_id, "*YOU ARE NOT APPROVED*", parse_mode='Markdown')
+    bot.send_message(chat_id, "*YOU ARE NOT APPROVED @raj14754*", parse_mode='Markdown')
 
 @bot.message_handler(commands=['approve', 'disapprove'])
 def approve_or_disapprove_user(message):
@@ -90,11 +90,11 @@ def approve_or_disapprove_user(message):
     cmd_parts = message.text.split()
 
     if not is_admin:
-        bot.send_message(chat_id, "*You are not authorized to use this command*", parse_mode='Markdown')
+        bot.send_message(chat_id, "*You are not authorized to use this command @raj14754*", parse_mode='Markdown')
         return
 
     if len(cmd_parts) < 2:
-        bot.send_message(chat_id, "*Invalid command format. Use /approve <user_id> <plan> <days> or /disapprove <user_id>.*", parse_mode='Markdown')
+        bot.send_message(chat_id, "*Invalid command format. Use /approve <user_id> <plan> <days> or /disapprove <user_id>.@raj14754*", parse_mode='Markdown')
         return
 
     action = cmd_parts[0]
@@ -105,11 +105,11 @@ def approve_or_disapprove_user(message):
     if action == '/approve':
         if plan == 1:
             if users_collection.count_documents({"plan": 1}) >= 99:
-                bot.send_message(chat_id, "*Approval failed: .  limit reached (99 users).*", parse_mode='Markdown')
+                bot.send_message(chat_id, "*Approval failed: .  limit reached (99 users).@raj14754*", parse_mode='Markdown')
                 return
         elif plan == 2: 
             if users_collection.count_documents({"plan": 2}) >= 499:
-                bot.send_message(chat_id, "*Approval failed: Flooding Start  limit reached (499 users).*", parse_mode='Markdown')
+                bot.send_message(chat_id, "*Approval failed: Flooding Start  limit reached (499 users).@raj14754*", parse_mode='Markdown')
                 return
 
         valid_until = (datetime.now() + timedelta(days=days)).date().isoformat() if days > 0 else datetime.now().date().isoformat()
@@ -118,14 +118,14 @@ def approve_or_disapprove_user(message):
             {"$set": {"plan": plan, "valid_until": valid_until, "access_count": 0}},
             upsert=True
         )
-        msg_text = f"*User {target_user_id} approved with plan {plan} for {days} days.*"
+        msg_text = f"*User {target_user_id} approved with plan {plan} for {days} days.@raj14754*"
     else:  # disapprove
         users_collection.update_one(
             {"user_id": target_user_id},
             {"$set": {"plan": 0, "valid_until": "", "access_count": 0}},
             upsert=True
         )
-        msg_text = f"*User {target_user_id} disapproved and reverted to free.*"
+        msg_text = f"*User {target_user_id} disapproved and reverted to free.@raj14754*"
 
     bot.send_message(chat_id, msg_text, parse_mode='Markdown')
     bot.send_message(CHANNEL_ID, msg_text, parse_mode='Markdown')
@@ -137,18 +137,18 @@ def attack_command(message):
     try:
         user_data = users_collection.find_one({"user_id": user_id})
         if not user_data or user_data['plan'] == 0:
-            bot.send_message(chat_id, "You are not approved to use this bot. Please contact the administrator.")
+            bot.send_message(chat_id, "You are not approved to use this bot. Please contact the administrator.@raj14754")
             return
 
         if user_data['plan'] == 1 and users_collection.count_documents({"plan": 1}) > 99:
-            bot.send_message(chat_id, "Your . is currently not available due to limit reached.")
+            bot.send_message(chat_id, "Your . is currently not available due to limit reached.@raj14754")
             return
 
         if user_data['plan'] == 2 and users_collection.count_documents({"plan": 2}) > 499:
-            bot.send_message(chat_id, "Your Flooding Start is currently not available due to limit reached.")
+            bot.send_message(chat_id, "Your Flooding Start is currently not available due to limit reached.@raj14754")
             return
 
-        bot.send_message(chat_id, "Enter the target IP, port, and duration (in seconds) separated by spaces.")
+        bot.send_message(chat_id, "Enter the target IP, port, and duration (in seconds) separated by spaces.@raj14754")
         bot.register_next_step_handler(message, process_attack_command)
     except Exception as e:
         logging.error(f"Error in attack command: {e}")
@@ -161,18 +161,18 @@ def attack_command(message):
     try:
         user_data = users_collection.find_one({"user_id": user_id})
         if not user_data or user_data['plan'] == 0:
-            bot.send_message(chat_id, "*You are not approved to use this bot. Please contact the administrator.*", parse_mode='Markdown')
+            bot.send_message(chat_id, "*You are not approved to use this bot. Please contact the administrator.@raj14754*", parse_mode='Markdown')
             return
 
         if user_data['plan'] == 1 and users_collection.count_documents({"plan": 1}) > 99:
-            bot.send_message(chat_id, "*Your .  is currently not available due to limit reached.*", parse_mode='Markdown')
+            bot.send_message(chat_id, "*Your .  is currently not available due to limit reached.@raj14754*", parse_mode='Markdown')
             return
 
         if user_data['plan'] == 2 and users_collection.count_documents({"plan": 2}) > 499:
-            bot.send_message(chat_id, "*Your Flooding Start  is currently not available due to limit reached.*", parse_mode='Markdown')
+            bot.send_message(chat_id, "*Your Flooding Start  is currently not available due to limit reached.@raj14754*", parse_mode='Markdown')
             return
 
-        bot.send_message(chat_id, "*Enter the target IP, port, and duration (in seconds) separated by spaces.*", parse_mode='Markdown')
+        bot.send_message(chat_id, "*Enter the target IP, port, and duration (in seconds) separated by spaces.@raj14754*", parse_mode='Markdown')
         bot.register_next_step_handler(message, process_attack_command)
     except Exception as e:
         logging.error(f"Error in attack command: {e}")
@@ -181,12 +181,12 @@ def process_attack_command(message):
     try:
         args = message.text.split()
         if len(args) != 3:
-            bot.send_message(message.chat.id, "*Invalid command format. Please use: /Attack target_ip target_port time*", parse_mode='Markdown')
+            bot.send_message(message.chat.id, "*Invalid command format. Please use: /Attack target_ip target_port time @raj14754*", parse_mode='Markdown')
             return
         target_ip, target_port, duration = args[0], int(args[1]), args[2]
 
         if target_port in blocked_ports:
-            bot.send_message(message.chat.id, f"*Port {target_port} is blocked. Please use a different port.*", parse_mode='Markdown')
+            bot.send_message(message.chat.id, f"*Port {target_port} is blocked. Please use a different port.@raj14754*", parse_mode='Markdown')
             return
 
         asyncio.run_coroutine_threadsafe(run_attack_command_async(target_ip, target_port, duration), loop)
@@ -212,18 +212,18 @@ def send_welcome(message):
     # Add buttons to the markup
     markup.add( btn2,btn3, btn4, btn6)
 
-    bot.send_message(message.chat.id, "*Choose an option:*", reply_markup=markup, parse_mode='Markdown')
+    bot.send_message(message.chat.id, "*Choose an option @raj14754:*", reply_markup=markup, parse_mode='Markdown')
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     if message.text == ".":
-       bot.reply_to(message, "*. selected*", parse_mode='Markdown')
+       bot.reply_to(message, "*. selected @raj14754*", parse_mode='Markdown')
     elif message.text == "FLOODING START 🔱":
-        bot.reply_to(message, "*READY FOR ATTACK*", parse_mode='Markdown')
+        bot.reply_to(message, "*READY FOR ATTACK @raj14754*", parse_mode='Markdown')
         attack_command(message)
 
     elif message.text == "ATTACK STOP 🚀":
-        bot.send_message(message.chat.id, "*/stop Coming Soon *", parse_mode='Markdown')
+        bot.send_message(message.chat.id, "*/stop Coming Soon @raj14754*", parse_mode='Markdown')
     elif message.text == "MY ACCOUNT🥷":
         user_id = message.from_user.id
         user_data = users_collection.find_one({"user_id": user_id})
@@ -237,19 +237,19 @@ def handle_message(message):
                         f"Valid Until: {valid_until}\n"
                         f"Current Time: {current_time}*")
         else:
-            response = "*No account information found. Please contact the administrator.*"
+            response = "*No account information found. Please contact the administrator.@raj14754*"
         bot.reply_to(message, response, parse_mode='Markdown')
     elif message.text == "Help":
-        bot.reply_to(message, "*Help selected*", parse_mode='Markdown')
+        bot.reply_to(message, "*Help selected @raj14754*", parse_mode='Markdown')
     elif message.text == "ADMIN ⛳":
-        bot.reply_to(message, "*Contact admin = @SharpX72*", parse_mode='Markdown')
+        bot.reply_to(message, "*Contact admin = @raj14754*", parse_mode='Markdown')
     else:
-        bot.reply_to(message, "*Invalid option*", parse_mode='Markdown')
+        bot.reply_to(message, "*Invalid option @raj14754*", parse_mode='Markdown')
 
 if __name__ == "__main__":
     asyncio_thread = Thread(target=start_asyncio_thread, daemon=True)
     asyncio_thread.start()
-    logging.info("Starting Codespace activity keeper and Telegram bot.\n FILE BY - @SharpX72\n@SharpX72\n@SharpX72\n@SharpX72\n@SharpX72\n@SharpX72\n@SharpX72\n@SharpX72")
+    logging.info("Starting Codespace activity keeper and Telegram bot.\n FILE BY - @raj14754\n@raj14754\n@raj14754\n@raj14754\n@raj14754\n@raj14754\n@raj14754\n@raj14754")
     while True:
         try:
             bot.polling(none_stop=True)
