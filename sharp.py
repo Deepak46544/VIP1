@@ -109,7 +109,7 @@ def approve_or_disapprove_user(message):
                 return
         elif plan == 2: 
             if users_collection.count_documents({"plan": 2}) >= 499:
-                bot.send_message(chat_id, "*Approval failed: Flooding Start  limit reached (499 users).@raj14754*", parse_mode='Markdown')
+                bot.send_message(chat_id, "*Approval failed: ATTACK Start  limit reached (499 users).@raj14754*", parse_mode='Markdown')
                 return
 
         valid_until = (datetime.now() + timedelta(days=days)).date().isoformat() if days > 0 else datetime.now().date().isoformat()
@@ -190,7 +190,7 @@ def process_attack_command(message):
             return
 
         asyncio.run_coroutine_threadsafe(run_attack_command_async(target_ip, target_port, duration), loop)
-        bot.send_message(message.chat.id, f"*Flooding parameters set :  {target_ip}:{target_port}:{duration}*\nAttack Running Dont put same ip port", parse_mode='Markdown')
+        bot.send_message(message.chat.id, f"*Attack started 💥\n\nHost: {target_ip}\nPort: {target_port}\nTime: {duration}", parse_mode='Markdown')
     except Exception as e:
           logging.error(f"Error in processing attack command: {e}")
 
@@ -204,7 +204,7 @@ def send_welcome(message):
     markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, one_time_keyboard=True)
 
     # Create buttons
-    btn2 = KeyboardButton("FLOODING START 🔱")
+    btn2 = KeyboardButton("ATTACK START 🔱")
     btn3 = KeyboardButton("ATTACK STOP 🚀")
     btn4 = KeyboardButton("MY ACCOUNT🥷")
     btn6 = KeyboardButton("ADMIN ⛳")
@@ -218,7 +218,7 @@ def send_welcome(message):
 def handle_message(message):
     if message.text == ".":
        bot.reply_to(message, "*. selected @raj14754*", parse_mode='Markdown')
-    elif message.text == "FLOODING START 🔱":
+    elif message.text == "ATTACK START 🔱":
         bot.reply_to(message, "*READY FOR ATTACK @raj14754*", parse_mode='Markdown')
         attack_command(message)
 
